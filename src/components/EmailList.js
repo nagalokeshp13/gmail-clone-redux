@@ -12,6 +12,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import './EmailList.css';
 import Section from './Section';
+import EmailRow from './EmailRow';
 
 function EmailList() {
   return (
@@ -59,7 +60,21 @@ function EmailList() {
       </div>
 
       <div className="emailList__list">
-        <h2>emails showing rows display here</h2>
+        <EmailRow
+          id="1"
+          title="Twitch"
+          subject="test"
+          description="This is a test messagesfsdfgsfgdfdfgsdfgsdfgdfgsdfgsdfgsdfsdfg"
+          time="12pm"
+        />
+
+        <EmailRow
+          id="1"
+          title="Twitch"
+          subject="test"
+          description="This is a test message"
+          time="12pm"
+        />
       </div>
     </div>
   );
