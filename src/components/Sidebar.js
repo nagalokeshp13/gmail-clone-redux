@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import InboxIcon from '@material-ui/icons/Inbox';
@@ -13,13 +14,17 @@ import DuoIcon from '@material-ui/icons/Duo';
 import PhoneIcon from '@material-ui/icons/Phone';
 import './Sidebar.css';
 import SidebarOption from './SidebarOption';
+import { openSendMessage } from '../features/mailSlice';
 
 function Sidebar() {
+  const dispatch = useDispatch();
+
   return (
     <div className="sidebar">
       <Button
         className="sidebar__compose"
         startIcon={<AddIcon fontSize="large" />}
+        onClick={() => dispatch(openSendMessage())}
       >
         Compose
       </Button>
