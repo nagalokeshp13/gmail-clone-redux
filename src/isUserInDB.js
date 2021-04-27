@@ -1,6 +1,7 @@
 import { db } from './firebase';
 
 export default async function isUserInDB(user) {
+  let user1 = user;
   console.log(user.email);
 
   let userFound = false;
@@ -10,8 +11,9 @@ export default async function isUserInDB(user) {
     .get()
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
+        // console.log(doc.id, ' => ', doc.data());
         userFound = true;
+        user1 = doc.data();
       });
     })
     .catch((error) => {
@@ -26,6 +28,9 @@ export default async function isUserInDB(user) {
       photoUrl: user.photoURL,
     });
   }
+
+  // console.log(user1);
+  return user1;
 }
 
 // const user1 = {

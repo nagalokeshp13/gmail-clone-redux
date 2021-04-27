@@ -1,15 +1,18 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import firebase from 'firebase';
 import { Button } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import './SendMail.css';
 import { closeSendMessage } from '../features/mailSlice';
 import { db } from '../firebase';
+import { selectUser } from '../features/userSlice';
+import isUserInDB from '../isUserInDB';
 
 function SendMail() {
   const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
   const {
     register,
@@ -17,11 +20,21 @@ function SendMail() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (formData) => {
+  const onSubmit = async (formData) => {
     // console.log(formData);
 
+    const toUser = await isUserInDB({
+      displayName: '',
+      email: formData.to,
+      photoURL: '',
+    });
+
+    // console.log('from send mail');
+    // console.log(toUser);
+
     db.collection('emails').add({
-      to: formData.to,
+      from: user,
+      to: toUser,
       subject: formData.subject,
       message: formData.message,
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
