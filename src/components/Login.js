@@ -5,6 +5,7 @@ import './Login.css';
 import gmailLogoImg from '../img/gmail-logo.jpg';
 import { login } from '../features/userSlice';
 import { auth, provider } from '../firebase';
+import isUserInDB from '../isUserInDB';
 
 function Login() {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ function Login() {
           })
         );
         console.log(`${user.displayName} logged in`);
+        isUserInDB(user);
       })
       .catch((error) => alert(error.message));
   };
