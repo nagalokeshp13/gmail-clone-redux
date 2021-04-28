@@ -23,7 +23,8 @@ function Login() {
           })
         );
         console.log(`${user.displayName} logged in`);
-        isUserInDB(user);
+        // eslint-disable-next-line no-unused-vars
+        const t = isUserInDB(user);
       })
       .catch((error) => alert(error.message));
   };

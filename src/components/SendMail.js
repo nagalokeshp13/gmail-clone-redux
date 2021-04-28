@@ -32,7 +32,7 @@ function SendMail() {
     // console.log('from send mail');
     // console.log(toUser);
 
-    db.collection('emails').add({
+    await db.collection('emails').add({
       from: user,
       to: toUser,
       subject: formData.subject,

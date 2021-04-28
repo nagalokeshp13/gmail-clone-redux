@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Checkbox, IconButton } from '@material-ui/core';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import RedoIcon from '@material-ui/icons/Redo';
@@ -14,12 +15,19 @@ import './EmailList.css';
 import Section from './Section';
 import EmailRow from './EmailRow';
 import { db } from '../firebase';
+import { selectUser } from '../features/userSlice';
+import { selectInbox, setEmailCount } from '../features/sidebarSlice';
 
 function EmailList() {
+  const dispatch = useDispatch();
+
+  const user = useSelector(selectUser);
+  const inbox = useSelector(selectInbox);
   const [emails, setEmails] = useState([]);
 
   useEffect(() => {
     db.collection('emails')
+      .where(`${inbox ? 'to' : 'from'}.email`, '==', user.email)
       .orderBy('timestamp', 'desc')
       .onSnapshot((snapshot) =>
         setEmails(
@@ -30,7 +38,9 @@ function EmailList() {
         )
       );
     // console.log(emails);
-  }, []);
+    dispatch(setEmailCount(emails.length));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inbox, emails]);
 
   return (
     <div className="emailList">
@@ -77,16 +87,18 @@ function EmailList() {
       </div>
 
       <div className="emailList__list">
-        {emails.map(({ id, data: { to, subject, message, timestamp } }) => (
-          <EmailRow
-            key={id}
-            id={id}
-            title={to.displayName}
-            subject={subject}
-            description={message}
-            time={new Date(timestamp?.seconds * 1000).toUTCString()}
-          />
-        ))}
+        {emails.map(
+          ({ id, data: { from, to, subject, message, timestamp } }) => (
+            <EmailRow
+              key={id}
+              id={id}
+              title={inbox ? from.email : to.email}
+              subject={subject}
+              description={message}
+              time={new Date(timestamp?.seconds * 1000).toUTCString()}
+            />
+          )
+        )}
       </div>
     </div>
   );

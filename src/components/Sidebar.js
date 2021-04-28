@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import InboxIcon from '@material-ui/icons/Inbox';
@@ -15,9 +15,16 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import './Sidebar.css';
 import SidebarOption from './SidebarOption';
 import { openSendMessage } from '../features/mailSlice';
+import {
+  selectInbox,
+  selectEmailCount,
+  toggleInboxSent,
+} from '../features/sidebarSlice';
 
 function Sidebar() {
   const dispatch = useDispatch();
+  const inbox = useSelector(selectInbox);
+  const emailCount = useSelector(selectEmailCount);
 
   return (
     <div className="sidebar">
@@ -29,13 +36,25 @@ function Sidebar() {
         Compose
       </Button>
 
-      <SidebarOption Icon={InboxIcon} title="Inbox" number={54} selected />
-      <SidebarOption Icon={StarIcon} title="Starred" number={54} />
-      <SidebarOption Icon={AccessTimeIcon} title="Snoozed" number={54} />
-      <SidebarOption Icon={LabelImportantIcon} title="Important" number={54} />
-      <SidebarOption Icon={NearMeIcon} title="Sent" number={54} />
-      <SidebarOption Icon={NoteIcon} title="Drafts" number={54} />
-      <SidebarOption Icon={ExpandMoreIcon} title="More" number={54} />
+      <SidebarOption
+        Icon={InboxIcon}
+        title="Inbox"
+        number={emailCount}
+        selected={inbox}
+        onclick={() => !inbox && dispatch(toggleInboxSent())}
+      />
+      <SidebarOption
+        Icon={NearMeIcon}
+        title="Sent"
+        number={emailCount}
+        selected={!inbox}
+        onclick={() => inbox && dispatch(toggleInboxSent())}
+      />
+      <SidebarOption Icon={StarIcon} title="Starred" number={0} />
+      <SidebarOption Icon={AccessTimeIcon} title="Snoozed" number={0} />
+      <SidebarOption Icon={LabelImportantIcon} title="Important" number={0} />
+      <SidebarOption Icon={NoteIcon} title="Drafts" number={0} />
+      <SidebarOption Icon={ExpandMoreIcon} title="More" number={0} />
 
       <div className="sidebar__footer">
         <div className="sidebar__footerIcons">
