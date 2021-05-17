@@ -1,13 +1,13 @@
 import { db } from './firebase';
 
-export default async function isUserInDB(user) {
-  let user1 = user;
-  console.log(user.email);
+export default async function isUserInDB(toUser) {
+  let user1 = toUser;
+  console.log(toUser.email);
 
   let userFound = false;
   await db
     .collection('users')
-    .where('email', '==', user.email)
+    .where('email', '==', toUser.email)
     .get()
     .then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
@@ -23,9 +23,9 @@ export default async function isUserInDB(user) {
   console.log(userFound ? 'user found in db' : 'adding user to db...');
   if (userFound === false) {
     db.collection('users').add({
-      displayName: user.displayName,
-      email: user.email,
-      photoUrl: user.photoURL,
+      displayName: toUser.displayName,
+      email: toUser.email,
+      photoUrl: toUser.photoURL,
     });
   }
 

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IconButton, Avatar } from '@material-ui/core';
@@ -49,8 +51,12 @@ function Header() {
         <IconButton>
           <NotificationsIcon />
         </IconButton>
-
-        <Avatar src={user?.photoUrl} onClick={signOut} />
+        <div className="header__avatar" onClick={signOut}>
+          <Avatar src={user?.photoUrl} />
+          <ul className="header__logout">
+            <li>Logout</li>
+          </ul>
+        </div>
       </div>
     </div>
   );

@@ -17,12 +17,14 @@ import EmailRow from './EmailRow';
 import { db } from '../firebase';
 import { selectUser } from '../features/userSlice';
 import { selectInbox, setEmailCount } from '../features/sidebarSlice';
+import { selectSendMessageIsOpen } from '../features/mailSlice';
 
 function EmailList() {
   const dispatch = useDispatch();
 
   const user = useSelector(selectUser);
   const inbox = useSelector(selectInbox);
+  const isMsgOpen = useSelector(selectSendMessageIsOpen);
   const [emails, setEmails] = useState([]);
 
   useEffect(() => {
@@ -38,9 +40,10 @@ function EmailList() {
         )
       );
     // console.log(emails);
-    dispatch(setEmailCount(emails.length));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inbox, emails]);
+  }, [inbox, isMsgOpen]);
+  dispatch(setEmailCount(emails.length));
 
   return (
     <div className="emailList">
@@ -92,7 +95,7 @@ function EmailList() {
             <EmailRow
               key={id}
               id={id}
-              title={inbox ? from.email : to.email}
+              title={inbox ? from.displayName : to.displayName}
               subject={subject}
               description={message}
               time={new Date(timestamp?.seconds * 1000).toUTCString()}

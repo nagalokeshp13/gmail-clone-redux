@@ -45,3 +45,17 @@
   display: flex;
   padding-right: 20px;
 }
+
+.header__avatar {
+  position: relative;
+  cursor: pointer;
+}
+
+.header__logout {
+  display: none;
+  position: fixed;
+}
+
+.header__avatar:hover > .header__logout {
+  display: block;
+}
